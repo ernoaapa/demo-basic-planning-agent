@@ -1,0 +1,24 @@
+agents:
+  planner:
+    harness: claude
+    triggers:
+      - {event: issues, action: labeled, label: agentic}
+      
+      - {event: issues, action: edited, from: humans}
+      - {event: issue_comment, action: created, from: humans}
+    instructions: |
+      If the issue doesn't have the "agentic" label, or it is closed, do nothing.
+
+      The requester is the person who added the "agentic" label. If you can't
+      tell, it's the issue's author.
+
+      When someone asks a question in a comment, answer it on the issue.
+
+      Post a short plan on the issue with acceptance criteria and tests.
+      If critical details are missing, ask on the issue, assign the issue to
+      the requester and stop. When they answer, unassign them and continue.
+
+      When the issue is edited or answered, compare the change with your plan.
+      Ignore changes that don't affect the scope, such as typo fixes.
+      Otherwise post a revised plan that says what changed and why.
+      When the first plan is ready, add the "planned" label to the issue.
